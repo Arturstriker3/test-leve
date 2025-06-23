@@ -65,35 +65,35 @@ Uma API serverless simples para agendamento de consultas médicas construída co
 }
 ```
 
-## Prerequisites
+## Pré-requisitos
 
-- Node.js 18.x or later
-- AWS CLI configured with appropriate credentials
+- Node.js 18.x ou superior
+- AWS CLI configurado com credenciais apropriadas
 - Serverless Framework CLI
 
-## Installation
+## Instalação
 
-1. Install dependencies:
+1. Instalar dependências:
 ```bash
 npm install
 ```
 
-2. Install Serverless CLI globally (if not already installed):
+2. Instalar Serverless CLI globalmente (se ainda não instalado):
 ```bash
 npm install -g serverless
 ```
 
-## Development
+## Desenvolvimento
 
-### Running locally
+### Executar localmente
 
 ```bash
 npm start
 ```
 
-This will start the API locally using serverless-offline plugin.
+Isso iniciará a API localmente usando o plugin serverless-offline.
 
-### Building
+### Compilar
 
 ```bash
 npm run build
@@ -106,21 +106,21 @@ npm run lint
 npm run lint:fix
 ```
 
-## Deployment
+## Deploy
 
-### Deploy to AWS
+### Deploy para AWS
 
 ```bash
 npm run deploy
 ```
 
-### Deploy to specific stage
+### Deploy para um estágio específico
 
 ```bash
 serverless deploy --stage production
 ```
 
-### Remove deployment
+### Remover deployment
 
 ```bash
 npm run remove
@@ -158,7 +158,7 @@ src/
 ### Listar Médicos e Horários Disponíveis
 
 ```bash
-curl https://your-api-url/agendas
+curl https://sua-api-url/agendas
 ```
 
 **Resposta esperada:**
@@ -194,7 +194,7 @@ curl https://your-api-url/agendas
 ### Criar Agendamento
 
 ```bash
-curl -X POST https://your-api-url/agendamento \
+curl -X POST https://sua-api-url/agendamento \
   -H "Content-Type: application/json" \
   -d '{
     "agendamento": {
@@ -220,30 +220,29 @@ curl -X POST https://your-api-url/agendamento \
 }
 ```
 
-## Error Handling
+## Tratamento de Erros
 
-The API returns standardized error responses:
+A API retorna respostas de erro padronizadas:
 
 ```json
 {
   "success": false,
-  "error": "Error message description"
+  "error": "Descrição da mensagem de erro"
 }
 ```
 
-Common HTTP status codes:
-- `200` - Success
-- `201` - Created
-- `400` - Bad Request (validation errors)
-- `404` - Not Found
-- `500` - Internal Server Error
+Códigos de status HTTP comuns:
+- `200` - Sucesso
+- `201` - Criado
+- `400` - Requisição Inválida (erros de validação)
+- `404` - Não Encontrado
+- `500` - Erro Interno do Servidor
 
-## Technologies Used
+## Tecnologias Utilizadas
 
-- **TypeScript** - Type-safe JavaScript
-- **AWS Lambda** - Serverless compute
-- **DynamoDB** - NoSQL database
-- **Serverless Framework** - Infrastructure as Code
-- **AWS SDK** - AWS service integration
-- **ESLint** - Code linting
-- **UUID** - Unique identifier generation 
+- **TypeScript** - JavaScript com segurança de tipos
+- **AWS Lambda** - Computação serverless
+- **Dados Mockados** - Dados em memória para desenvolvimento
+- **Serverless Framework** - Infraestrutura como Código
+- **ESLint** - Linting de código
+- **UUID** - Geração de identificadores únicos 
