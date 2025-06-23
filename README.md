@@ -1,10 +1,11 @@
-# API Serverless - Sistema de Agendas e Agendamentos
+# API Serverless - Sistema de Agendamento Médico
 
-Uma API serverless para gerenciamento de agendas e agendamentos construída com TypeScript, AWS Lambda e dados mockados.
+Uma API serverless simples para agendamento de consultas médicas construída com TypeScript, AWS Lambda e dados mockados.
 
 ## Funcionalidades
 
-- **Operações CRUD**: Criar, Ler, Atualizar, Deletar agendas e agendamentos
+- **Listagem de Médicos**: Visualizar médicos disponíveis e seus horários
+- **Agendamento**: Criar agendamentos para consultas médicas
 - **TypeScript**: Segurança de tipos e recursos modernos do JavaScript
 - **Serverless**: Construído com Serverless Framework para AWS Lambda
 - **Dados Mockados**: Dados de exemplo em memória para desenvolvimento e testes
@@ -14,51 +15,53 @@ Uma API serverless para gerenciamento de agendas e agendamentos construída com 
 
 ## Endpoints da API
 
-### Agendas
+### Médicos e Horários
 
-- `POST /agendas` - Criar uma nova agenda
-- `GET /agendas` - Listar todas as agendas
-- `GET /agendas/{id}` - Obter uma agenda por ID
-- `PUT /agendas/{id}` - Atualizar uma agenda
-- `DELETE /agendas/{id}` - Excluir uma agenda
+- `GET /agendas` - Listar médicos com horários disponíveis
 
 ### Agendamentos
 
-- `POST /agendamentos` - Criar um novo agendamento
-- `GET /agendamentos` - Listar todos os agendamentos
-- `GET /agendamentos/{id}` - Obter um agendamento por ID
-- `PUT /agendamentos/{id}` - Atualizar um agendamento
-- `DELETE /agendamentos/{id}` - Excluir um agendamento
-- `GET /agendas/{agendaId}/agendamentos` - Listar agendamentos de uma agenda específica
+- `POST /agendamento` - Criar um novo agendamento
 
 ## Schemas
 
-### Agenda
+### Resposta da Listagem de Médicos (GET /agendas)
 
 ```typescript
 {
-  id: string;           // UUID (auto-gerado)
-  nome: string;         // Obrigatório
-  descricao: string;    // Obrigatório
-  ativo: boolean;       // Padrão: true
-  criadoEm: string;     // ISO timestamp (auto-gerado)
-  atualizadoEm: string; // ISO timestamp (auto-atualizado)
+  "medicos": [
+    {
+      "id": number,
+      "nome": string,
+      "especialidade": string,
+      "horarios_disponiveis": string[] // Formato: "YYYY-MM-DD HH:MM"
+    }
+  ]
 }
 ```
 
-### Agendamento
+### Requisição de Agendamento (POST /agendamento)
 
 ```typescript
 {
-  id: string;           // UUID (auto-gerado)
-  agendaId: string;     // ID da agenda (obrigatório)
-  titulo: string;       // Obrigatório
-  descricao?: string;   // Opcional
-  dataHora: string;     // ISO timestamp (obrigatório)
-  duracao: number;      // Em minutos (padrão: 30)
-  status: AgendamentoStatus; // AGENDADO, CONFIRMADO, CANCELADO, CONCLUIDO
-  criadoEm: string;     // ISO timestamp (auto-gerado)
-  atualizadoEm: string; // ISO timestamp (auto-atualizado)
+  "agendamento": {
+    "medico": string,      // Nome do médico
+    "paciente": string,    // Nome do paciente
+    "data_horario": string // Formato: "YYYY-MM-DD HH:MM"
+  }
+}
+```
+
+### Resposta de Agendamento
+
+```typescript
+{
+  "mensagem": "Agendamento realizado com sucesso",
+  "agendamento": {
+    "medico": string,
+    "paciente": string,
+    "data_horario": string
+  }
 }
 ```
 
@@ -127,75 +130,94 @@ npm run remove
 
 ```
 src/
-├── agenda/            # Domínio de Agenda
+├── agenda/            # Domínio de Médicos
 │   ├── controller/    # Controllers do Lambda
-│   │   └── agenda.controller.ts
+│   │   └── medicos.controller.ts
 │   ├── service/       # Lógica de negócio
-│   │   └── agenda.service.ts
-│   ├── dto/           # Data Transfer Objects
-│   │   └── agenda.dto.ts
+│   │   └── medicos.service.ts
 │   ├── interface/     # Interfaces TypeScript
-│   │   └── agenda.interface.ts
+│   │   └── medico.interface.ts
 │   └── mocks/         # Dados mockados
-│       └── agenda.mocks.ts
+│       └── medicos.mocks.ts
 ├── agendamento/       # Domínio de Agendamento
 │   ├── controller/    # Controllers do Lambda
-│   │   └── agendamento.controller.ts
+│   │   └── agendamentos.controller.ts
 │   ├── service/       # Lógica de negócio
-│   │   └── agendamento.service.ts
-│   ├── dto/           # Data Transfer Objects
-│   │   └── agendamento.dto.ts
+│   │   └── agendamentos.service.ts
 │   ├── interface/     # Interfaces TypeScript
 │   │   └── agendamento.interface.ts
 │   └── mocks/         # Dados mockados
-│       └── agendamento.mocks.ts
+│       └── agendamentos.mocks.ts
 └── utils/             # Funções utilitárias
     ├── response.ts    # Helpers de resposta HTTP
     └── validation.ts  # Validação de entrada
 ```
 
-## API Usage Examples
+## Exemplos de Uso da API
 
-### Create Product
+### Listar Médicos e Horários Disponíveis
 
 ```bash
-curl -X POST https://your-api-url/products \
+curl https://your-api-url/agendas
+```
+
+**Resposta esperada:**
+```json
+{
+  "success": true,
+  "data": {
+    "medicos": [
+      {
+        "id": 1,
+        "nome": "Dr. João Silva",
+        "especialidade": "Cardiologista",
+        "horarios_disponiveis": [
+          "2024-10-05 09:00",
+          "2024-10-05 10:00",
+          "2024-10-05 11:00"
+        ]
+      },
+      {
+        "id": 2,
+        "nome": "Dra. Maria Souza",
+        "especialidade": "Dermatologista",
+        "horarios_disponiveis": [
+          "2024-10-06 14:00",
+          "2024-10-06 15:00"
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Criar Agendamento
+
+```bash
+curl -X POST https://your-api-url/agendamento \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Laptop",
-    "description": "High-performance laptop",
-    "price": 999.99,
-    "category": "Electronics"
+    "agendamento": {
+      "medico": "Dr. João Silva",
+      "paciente": "Carlos Almeida",
+      "data_horario": "2024-10-05 09:00"
+    }
   }'
 ```
 
-### Get All Products
-
-```bash
-curl https://your-api-url/products
-```
-
-### Get Product by ID
-
-```bash
-curl https://your-api-url/products/{product-id}
-```
-
-### Update Product
-
-```bash
-curl -X PUT https://your-api-url/products/{product-id} \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Updated Laptop",
-    "price": 1299.99
-  }'
-```
-
-### Delete Product
-
-```bash
-curl -X DELETE https://your-api-url/products/{product-id}
+**Resposta esperada:**
+```json
+{
+  "success": true,
+  "data": {
+    "mensagem": "Agendamento realizado com sucesso",
+    "agendamento": {
+      "medico": "Dr. João Silva",
+      "paciente": "Carlos Almeida",
+      "data_horario": "2024-10-05 09:00"
+    }
+  }
+}
 ```
 
 ## Error Handling

@@ -15,94 +15,22 @@ plugins:
   - serverless-offline
 
 functions:
-  # Agenda Functions
-  criarAgenda:
-    handler: src/agenda/controller/agenda.controller.criarAgenda
-    events:
-      - http:
-          path: agendas
-          method: post
-          cors: true
-
-  obterAgenda:
-    handler: src/agenda/controller/agenda.controller.obterAgendaPorId
-    events:
-      - http:
-          path: agendas/{id}
-          method: get
-          cors: true
-
-  listarAgendas:
-    handler: src/agenda/controller/agenda.controller.listarAgendas
+  # Listar médicos e horários disponíveis
+  listarMedicos:
+    handler: src/agenda/controller/medicos.controller.listarMedicos
     events:
       - http:
           path: agendas
           method: get
           cors: true
 
-  atualizarAgenda:
-    handler: src/agenda/controller/agenda.controller.atualizarAgenda
-    events:
-      - http:
-          path: agendas/{id}
-          method: put
-          cors: true
-
-  excluirAgenda:
-    handler: src/agenda/controller/agenda.controller.excluirAgenda
-    events:
-      - http:
-          path: agendas/{id}
-          method: delete
-          cors: true
-
-  # Agendamento Functions
+  # Criar agendamento
   criarAgendamento:
-    handler: src/agendamento/controller/agendamento.controller.criarAgendamento
+    handler: src/agendamento/controller/agendamentos.controller.criarAgendamento
     events:
       - http:
-          path: agendamentos
+          path: agendamento
           method: post
-          cors: true
-
-  obterAgendamento:
-    handler: src/agendamento/controller/agendamento.controller.obterAgendamentoPorId
-    events:
-      - http:
-          path: agendamentos/{id}
-          method: get
-          cors: true
-
-  listarAgendamentos:
-    handler: src/agendamento/controller/agendamento.controller.listarAgendamentos
-    events:
-      - http:
-          path: agendamentos
-          method: get
-          cors: true
-
-  atualizarAgendamento:
-    handler: src/agendamento/controller/agendamento.controller.atualizarAgendamento
-    events:
-      - http:
-          path: agendamentos/{id}
-          method: put
-          cors: true
-
-  excluirAgendamento:
-    handler: src/agendamento/controller/agendamento.controller.excluirAgendamento
-    events:
-      - http:
-          path: agendamentos/{id}
-          method: delete
-          cors: true
-
-  listarAgendamentosPorAgenda:
-    handler: src/agendamento/controller/agendamento.controller.listarAgendamentosPorAgenda
-    events:
-      - http:
-          path: agendas/{agendaId}/agendamentos
-          method: get
           cors: true
 
 # No additional AWS resources needed since we're using mocked data 

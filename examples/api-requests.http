@@ -1,0 +1,103 @@
+### Ambiente de Desenvolvimento
+@baseUrl = http://localhost:3000/dev
+
+### === LISTAR MÉDICOS E HORÁRIOS ===
+
+### Listar todos os médicos com horários disponíveis
+GET {{baseUrl}}/agendas
+
+### === CRIAR AGENDAMENTO ===
+
+### Criar agendamento com Dr. João Silva
+POST {{baseUrl}}/agendamento
+Content-Type: application/json
+
+{
+  "agendamento": {
+    "medico": "Dr. João Silva",
+    "paciente": "Carlos Almeida",
+    "data_horario": "2024-10-05 09:00"
+  }
+}
+
+### Criar agendamento com Dra. Maria Souza
+POST {{baseUrl}}/agendamento
+Content-Type: application/json
+
+{
+  "agendamento": {
+    "medico": "Dra. Maria Souza",
+    "paciente": "Ana Santos",
+    "data_horario": "2024-10-06 14:00"
+  }
+}
+
+### Criar agendamento com Dr. Carlos Oliveira
+POST {{baseUrl}}/agendamento
+Content-Type: application/json
+
+{
+  "agendamento": {
+    "medico": "Dr. Carlos Oliveira",
+    "paciente": "João Pereira",
+    "data_horario": "2024-10-05 13:00"
+  }
+}
+
+### === TESTES DE VALIDAÇÃO ===
+
+### Erro de Validação - Campo agendamento faltando
+POST {{baseUrl}}/agendamento
+Content-Type: application/json
+
+{
+  "medico": "Dr. João Silva",
+  "paciente": "Carlos Almeida",
+  "data_horario": "2024-10-05 09:00"
+}
+
+### Erro de Validação - Campos obrigatórios faltando
+POST {{baseUrl}}/agendamento
+Content-Type: application/json
+
+{
+  "agendamento": {
+    "medico": "Dr. João Silva"
+  }
+}
+
+### Erro de Validação - Formato de data inválido
+POST {{baseUrl}}/agendamento
+Content-Type: application/json
+
+{
+  "agendamento": {
+    "medico": "Dr. João Silva",
+    "paciente": "Carlos Almeida",
+    "data_horario": "05/10/2024 09:00"
+  }
+}
+
+### Erro - Médico não encontrado
+POST {{baseUrl}}/agendamento
+Content-Type: application/json
+
+{
+  "agendamento": {
+    "medico": "Dr. Inexistente",
+    "paciente": "Carlos Almeida",
+    "data_horario": "2024-10-05 09:00"
+  }
+}
+
+### Erro - Horário não disponível (após fazer agendamento anterior)
+POST {{baseUrl}}/agendamento
+Content-Type: application/json
+
+{
+  "agendamento": {
+    "medico": "Dr. João Silva",
+    "paciente": "Outro Paciente",
+    "data_horario": "2024-10-05 09:00"
+  }
+} 
