@@ -100,4 +100,40 @@ Content-Type: application/json
     "paciente": "Outro Paciente",
     "data_horario": "2024-10-05 09:00"
   }
-} 
+}
+
+### Listar Médicos e Horários Disponíveis
+GET http://localhost:3000/dev/agendas
+Content-Type: application/json
+
+###
+
+### Exemplo de resposta esperada para GET /agendas
+# {
+#   "data": {
+#     "medicos": [
+#       {
+#         "id": 1,
+#         "nome": "Dr. João Silva",
+#         "especialidade": "Cardiologista",
+#         "horarios_disponiveis": [
+#           "2024-10-05 09:00",
+#           "2024-10-05 10:00",
+#           "2024-10-05 11:00"
+#         ]
+#       },
+#       {
+#         "id": 2,
+#         "nome": "Dra. Maria Souza",
+#         "especialidade": "Dermatologista",
+#         "horarios_disponiveis": [
+#           "2024-10-06 14:00",
+#           "2024-10-06 15:00"
+#         ]
+#       }
+#     ]
+#   },
+#   "message": "Agendas retrieved successfully",
+#   "success": true,
+#   "timestamp": "2024-01-01T12:00:00.000Z"
+# } 

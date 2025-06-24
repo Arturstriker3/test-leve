@@ -1,170 +1,48 @@
-# API Serverless - Sistema de Agendamento Médico
+# API Serverless - Agenda Médica
 
-Uma API serverless simples para agendamento de consultas médicas construída com TypeScript, AWS Lambda e dados mockados.
+Uma API serverless construída com TypeScript, seguindo padrões arquiteturais inspirados no NestJS, com injeção de dependência e estrutura modular.
 
-## Funcionalidades
+## 🏗️ Arquitetura
 
-- **Listagem de Médicos**: Visualizar médicos disponíveis e seus horários
-- **Agendamento**: Criar agendamentos para consultas médicas
-- **TypeScript**: Segurança de tipos e recursos modernos do JavaScript
-- **Serverless**: Construído com Serverless Framework para AWS Lambda
-- **Dados Mockados**: Dados de exemplo em memória para desenvolvimento e testes
-- **Validação**: Validação de entrada com mensagens de erro detalhadas
-- **CORS**: Compartilhamento de recursos entre origens habilitado
-- **Clean Architecture**: Separação de responsabilidades com domínios, services, controllers e utilities
-
-## Endpoints da API
-
-### Médicos e Horários
-
-- `GET /agendas` - Listar médicos com horários disponíveis
-
-### Agendamentos
-
-- `POST /agendamento` - Criar um novo agendamento
-
-## Schemas
-
-### Resposta da Listagem de Médicos (GET /agendas)
-
-```typescript
-{
-  "medicos": [
-    {
-      "id": number,
-      "nome": string,
-      "especialidade": string,
-      "horarios_disponiveis": string[] // Formato: "YYYY-MM-DD HH:MM"
-    }
-  ]
-}
-```
-
-### Requisição de Agendamento (POST /agendamento)
-
-```typescript
-{
-  "agendamento": {
-    "medico": string,      // Nome do médico
-    "paciente": string,    // Nome do paciente
-    "data_horario": string // Formato: "YYYY-MM-DD HH:MM"
-  }
-}
-```
-
-### Resposta de Agendamento
-
-```typescript
-{
-  "mensagem": "Agendamento realizado com sucesso",
-  "agendamento": {
-    "medico": string,
-    "paciente": string,
-    "data_horario": string
-  }
-}
-```
-
-## Pré-requisitos
-
-- Node.js 18.x ou superior
-- AWS CLI configurado com credenciais apropriadas
-- Serverless Framework CLI
-
-## Instalação
-
-1. Instalar dependências:
-```bash
-npm install
-```
-
-2. Instalar Serverless CLI globalmente (se ainda não instalado):
-```bash
-npm install -g serverless
-```
-
-## Desenvolvimento
-
-### Executar localmente
-
-```bash
-npm start
-```
-
-Isso iniciará a API localmente usando o plugin serverless-offline.
-
-### Compilar
-
-```bash
-npm run build
-```
-
-### Linting
-
-```bash
-npm run lint
-npm run lint:fix
-```
-
-## Deploy
-
-### Deploy para AWS
-
-```bash
-npm run deploy
-```
-
-### Deploy para um estágio específico
-
-```bash
-serverless deploy --stage production
-```
-
-### Remover deployment
-
-```bash
-npm run remove
-```
-
-## Estrutura do Projeto
+A aplicação segue uma estrutura modular bem definida:
 
 ```
 src/
-├── agenda/            # Domínio de Médicos
-│   ├── controller/    # Controllers do Lambda
-│   │   └── medicos.controller.ts
-│   ├── service/       # Lógica de negócio
-│   │   └── medicos.service.ts
-│   ├── interface/     # Interfaces TypeScript
-│   │   └── medico.interface.ts
-│   └── mocks/         # Dados mockados
-│       └── medicos.mocks.ts
-├── agendamento/       # Domínio de Agendamento
-│   ├── controller/    # Controllers do Lambda
-│   │   └── agendamentos.controller.ts
-│   ├── service/       # Lógica de negócio
-│   │   └── agendamentos.service.ts
-│   ├── interface/     # Interfaces TypeScript
-│   │   └── agendamento.interface.ts
-│   └── mocks/         # Dados mockados
-│       └── agendamentos.mocks.ts
-└── utils/             # Funções utilitárias
-    ├── response.ts    # Helpers de resposta HTTP
-    └── validation.ts  # Validação de entrada
+  ├── shared/           # Recursos compartilhados
+  │   ├── container/    # Configuração do container de DI
+  │   ├── decorators/   # Decorators customizados
+  │   ├── interfaces/   # Interfaces compartilhadas
+  │   ├── types/        # Tipos e constantes
+  │   └── utils/        # Utilitários compartilhados
+  ├── utils/            # Funções utilitárias específicas
+  ├── handlers/         # Handlers das funções Lambda
+  ├── agenda/           # Módulo de agenda
+  │   ├── controller/   # Controllers
+  │   ├── service/      # Services
+  │   ├── dto/          # Data Transfer Objects
+  │   ├── interface/    # Interfaces do domínio
+  │   ├── mocks/        # Dados mockados
+  │   └── tests/        # Testes do módulo
+  └── index.ts          # Ponto de entrada principal
 ```
 
-## Exemplos de Uso da API
+## 🚀 Tecnologias
 
-### Listar Médicos e Horários Disponíveis
+- **TypeScript** - Linguagem principal
+- **Serverless Framework** - Deploy e gerenciamento
+- **Inversify** - Injeção de dependência
+- **Class-validator** - Validação de dados
+- **Class-transformer** - Transformação de objetos
+- **Jest** - Testes
 
-```bash
-curl https://sua-api-url/agendas
-```
+## 📋 API Endpoints
 
-**Resposta esperada:**
+### GET /agendas
+Retorna a lista de médicos disponíveis com seus horários.
+
+**Resposta:**
 ```json
 {
-  "success": true,
   "data": {
     "medicos": [
       {
@@ -187,62 +65,101 @@ curl https://sua-api-url/agendas
         ]
       }
     ]
-  }
-}
-```
-
-### Criar Agendamento
-
-```bash
-curl -X POST https://sua-api-url/agendamento \
-  -H "Content-Type: application/json" \
-  -d '{
-    "agendamento": {
-      "medico": "Dr. João Silva",
-      "paciente": "Carlos Almeida",
-      "data_horario": "2024-10-05 09:00"
-    }
-  }'
-```
-
-**Resposta esperada:**
-```json
-{
+  },
+  "message": "Agendas retrieved successfully",
   "success": true,
-  "data": {
-    "mensagem": "Agendamento realizado com sucesso",
-    "agendamento": {
-      "medico": "Dr. João Silva",
-      "paciente": "Carlos Almeida",
-      "data_horario": "2024-10-05 09:00"
-    }
+  "timestamp": "2024-01-01T12:00:00.000Z"
+}
+```
+
+## 🛠️ Desenvolvimento
+
+### Instalação
+```bash
+npm install
+```
+
+### Executar localmente
+```bash
+npm start
+```
+
+### Executar testes
+```bash
+npm test
+```
+
+### Build
+```bash
+npm run build
+```
+
+### Deploy
+```bash
+npm run deploy
+```
+
+## 🏛️ Padrões Arquiteturais
+
+### Injeção de Dependência
+Utilizamos o Inversify para gerenciar as dependências:
+
+```typescript
+@Injectable()
+export class AgendaService {
+  // Service implementation
+}
+
+@Injectable()
+export class AgendaController {
+  constructor(
+    @inject(TYPES.AgendaService) private readonly agendaService: AgendaService
+  ) {}
+}
+```
+
+### Validação com Decorators
+Os DTOs utilizam class-validator para validação:
+
+```typescript
+export class MedicoDto {
+  @IsNumber()
+  id!: number;
+
+  @IsString()
+  nome!: string;
+
+  @IsString()
+  especialidade!: string;
+
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  horarios_disponiveis!: string[];
+}
+```
+
+### Guard Clauses
+Seguimos o padrão de guard clauses para reduzir aninhamento:
+
+```typescript
+async getAgendas(): Promise<BaseResponse<AgendaResponse>> {
+  try {
+    const agendas = await this.agendaService.getAgendas();
+    return ResponseBuilder.success(agendas, 'Agendas retrieved successfully');
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Failed to retrieve agendas';
+    return ResponseBuilder.error(message);
   }
 }
 ```
 
-## Tratamento de Erros
+## 📝 Extensão
 
-A API retorna respostas de erro padronizadas:
+Para adicionar novos módulos, siga a estrutura estabelecida:
 
-```json
-{
-  "success": false,
-  "error": "Descrição da mensagem de erro"
-}
-```
-
-Códigos de status HTTP comuns:
-- `200` - Sucesso
-- `201` - Criado
-- `400` - Requisição Inválida (erros de validação)
-- `404` - Não Encontrado
-- `500` - Erro Interno do Servidor
-
-## Tecnologias Utilizadas
-
-- **TypeScript** - JavaScript com segurança de tipos
-- **AWS Lambda** - Computação serverless
-- **Dados Mockados** - Dados em memória para desenvolvimento
-- **Serverless Framework** - Infraestrutura como Código
-- **ESLint** - Linting de código
-- **UUID** - Geração de identificadores únicos 
+1. Crie a pasta do módulo em `src/`
+2. Implemente as camadas: controller, service, dto, interface, mocks
+3. Registre no container de DI
+4. Adicione as rotas no `serverless.yml`
+5. Exporte no `index.ts` 

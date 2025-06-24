@@ -1,141 +1,24 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { inject } from 'inversify';
+import { Injectable } from '../../shared/decorators/injectable.decorator';
+import { TYPES } from '../../shared/types/container-types';
 import { AgendaService } from '../service/agenda.service';
-import { validateCreateAgenda, validateUpdateAgenda, isValidUUID } from '../../utils/validation';
-import {
-  successResponse,
-  errorResponse,
-  notFoundResponse,
-  serverErrorResponse,
-  createdResponse,
-} from '../../utils/response';
+import { ResponseBuilder } from '../../shared/utils/response-builder.util';
+import { BaseResponse } from '../../shared/interfaces/base-response.interface';
+import { AgendaResponse } from '../interface/agenda-response.interface';
 
-const agendaService = new AgendaService();
+@Injectable()
+export class AgendaController {
+  constructor(
+    @inject(TYPES.AgendaService) private readonly agendaService: AgendaService
+  ) {}
 
-export const criarAgenda = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  try {
-    if (!event.body) {
-      return errorResponse('Corpo da requisição é obrigatório');
+  async getAgendas(): Promise<BaseResponse<AgendaResponse>> {
+    try {
+      const agendas = await this.agendaService.getAgendas();
+      return ResponseBuilder.success(agendas, 'Agendas retrieved successfully');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to retrieve agendas';
+      return ResponseBuilder.error(message);
     }
-
-    const dadosRequisicao = JSON.parse(event.body);
-    const erroValidacao = validateCreateAgenda(dadosRequisicao);
-
-    if (erroValidacao) {
-      return errorResponse(erroValidacao);
-    }
-
-    const agenda = await agendaService.criarAgenda(dadosRequisicao);
-    return createdResponse(agenda);
-  } catch (error) {
-    console.error('Erro ao criar agenda:', error);
-    return serverErrorResponse();
   }
-};
-
-export const obterAgendaPorId = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  try {
-    const { id } = event.pathParameters || {};
-
-    if (!id) {
-      return errorResponse('ID da agenda é obrigatório');
-    }
-
-    if (!isValidUUID(id)) {
-      return errorResponse('Formato de ID da agenda inválido');
-    }
-
-    const agenda = await agendaService.obterAgendaPorId(id);
-
-    if (!agenda) {
-      return notFoundResponse('Agenda não encontrada');
-    }
-
-    return successResponse(agenda);
-  } catch (error) {
-    console.error('Erro ao obter agenda:', error);
-    return serverErrorResponse();
-  }
-};
-
-export const listarAgendas = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  try {
-    const { nome, ativo } = event.queryStringParameters || {};
-    
-    const filtros = {
-      nome: nome || undefined,
-      ativo: ativo ? ativo === 'true' : undefined,
-    };
-
-    // Remove undefined values to make it compatible with AgendaFiltros
-    const filtrosLimpos = Object.fromEntries(
-      Object.entries(filtros).filter(([, value]) => value !== undefined)
-    );
-
-    const agendas = await agendaService.listarAgendas(filtrosLimpos);
-    return successResponse(agendas);
-  } catch (error) {
-    console.error('Erro ao listar agendas:', error);
-    return serverErrorResponse();
-  }
-};
-
-export const atualizarAgenda = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  try {
-    const { id } = event.pathParameters || {};
-
-    if (!id) {
-      return errorResponse('ID da agenda é obrigatório');
-    }
-
-    if (!isValidUUID(id)) {
-      return errorResponse('Formato de ID da agenda inválido');
-    }
-
-    if (!event.body) {
-      return errorResponse('Corpo da requisição é obrigatório');
-    }
-
-    const dadosRequisicao = JSON.parse(event.body);
-    const erroValidacao = validateUpdateAgenda(dadosRequisicao);
-
-    if (erroValidacao) {
-      return errorResponse(erroValidacao);
-    }
-
-    const agendaAtualizada = await agendaService.atualizarAgenda(id, dadosRequisicao);
-
-    if (!agendaAtualizada) {
-      return notFoundResponse('Agenda não encontrada');
-    }
-
-    return successResponse(agendaAtualizada);
-  } catch (error) {
-    console.error('Erro ao atualizar agenda:', error);
-    return serverErrorResponse();
-  }
-};
-
-export const excluirAgenda = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  try {
-    const { id } = event.pathParameters || {};
-
-    if (!id) {
-      return errorResponse('ID da agenda é obrigatório');
-    }
-
-    if (!isValidUUID(id)) {
-      return errorResponse('Formato de ID da agenda inválido');
-    }
-
-    const excluido = await agendaService.excluirAgenda(id);
-
-    if (!excluido) {
-      return notFoundResponse('Agenda não encontrada');
-    }
-
-    return successResponse({ message: 'Agenda excluída com sucesso' });
-  } catch (error) {
-    console.error('Erro ao excluir agenda:', error);
-    return serverErrorResponse();
-  }
-}; 
+} 

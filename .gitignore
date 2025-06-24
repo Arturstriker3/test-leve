@@ -114,6 +114,7 @@ logs
 # Compiled TypeScript
 dist/
 build/
+.build/
 
 # Jest coverage
 coverage/ 

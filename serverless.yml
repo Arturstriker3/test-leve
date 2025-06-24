@@ -16,21 +16,12 @@ plugins:
 
 functions:
   # Listar médicos e horários disponíveis
-  listarMedicos:
-    handler: src/agenda/controller/medicos.controller.listarMedicos
+  getAgendas:
+    handler: src/index.getAgendas
     events:
       - http:
           path: agendas
           method: get
-          cors: true
-
-  # Criar agendamento
-  criarAgendamento:
-    handler: src/agendamento/controller/agendamentos.controller.criarAgendamento
-    events:
-      - http:
-          path: agendamento
-          method: post
           cors: true
 
 # No additional AWS resources needed since we're using mocked data 

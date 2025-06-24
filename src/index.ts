@@ -1,0 +1,1 @@
+export { getAgendas } from './handlers/agenda.handler'; 
