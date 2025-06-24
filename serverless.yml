@@ -24,4 +24,4 @@ functions:
           method: get
           cors: true
 
-# No additional AWS resources needed since we're using mocked data 
+# Restante Mockado 
