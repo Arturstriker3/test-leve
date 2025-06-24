@@ -24,7 +24,7 @@ describe('AgendaController', () => {
       const mockServiceResponse: AgendaResponse = {
         data: [
           {
-            id: 1,
+            id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
             nome: "Dr. João Silva",
             especialidade: "Cardiologista",
             horarios_disponiveis: ["2024-10-05 09:00"]

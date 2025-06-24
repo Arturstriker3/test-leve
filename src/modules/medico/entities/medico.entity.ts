@@ -1,9 +1,9 @@
-import { IsNumber, IsString, IsEnum, IsArray } from 'class-validator';
+import { IsString, IsEnum, IsArray, IsUUID } from 'class-validator';
 import { FilterConfig } from '../../shared/interfaces/filter-config.interface';
 
 export class MedicoEntity {
-  @IsNumber()
-  id!: number;
+  @IsUUID()
+  id!: string;
 
   @IsString()
   nome!: string;
@@ -26,9 +26,9 @@ export class MedicoEntity {
   static getFilterConfig(): FilterConfig {
     return {
       id: {
-        type: 'number',
+        type: 'string',
         required: false,
-        description: 'Filter by medico ID'
+        description: 'Filter by medico UUID'
       },
       nome: {
         type: 'string',

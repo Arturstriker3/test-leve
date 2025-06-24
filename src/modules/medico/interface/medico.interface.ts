@@ -1,5 +1,5 @@
 export interface Medico {
-  id: number;
+  id: string;
   nome: string;
   especialidade: string;
   horarios_disponiveis: string[];

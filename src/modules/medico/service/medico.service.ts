@@ -30,7 +30,7 @@ export class MedicoService {
     return PaginationUtil.paginate(filteredData, paginationParams);
   }
 
-  async getMedicoById(id: number): Promise<Medico | null> {
+  async getMedicoById(id: string): Promise<Medico | null> {
     const medico = medicosMock.find(m => m.id === id);
     return medico || null;
   }

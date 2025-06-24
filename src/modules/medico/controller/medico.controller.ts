@@ -42,7 +42,7 @@ export class MedicoController {
     }
   }
 
-  async getMedicoById(id: number): Promise<BaseResponse<Medico | null>> {
+  async getMedicoById(id: string): Promise<BaseResponse<Medico | null>> {
     try {
       const medico = await this.medicoService.getMedicoById(id);
       if (!medico) {

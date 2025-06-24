@@ -1,8 +1,8 @@
-import { IsNumber, IsString, IsArray, ArrayNotEmpty } from 'class-validator';
+import { IsString, IsArray, ArrayNotEmpty, IsUUID } from 'class-validator';
 
 export class MedicoDto {
-  @IsNumber()
-  id!: number;
+  @IsUUID()
+  id!: string;
 
   @IsString()
   nome!: string;

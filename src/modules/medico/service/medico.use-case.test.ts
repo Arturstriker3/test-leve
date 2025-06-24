@@ -44,15 +44,15 @@ describe('MedicoService Use Cases', () => {
 
   describe('getMedicoById', () => {
     it('should return medico when id exists', async () => {
-      const result = await medicoService.getMedicoById(1);
+      const result = await medicoService.getMedicoById('f47ac10b-58cc-4372-a567-0e02b2c3d479');
       
       expect(result).toBeDefined();
-      expect(result?.id).toBe(1);
+      expect(result?.id).toBe('f47ac10b-58cc-4372-a567-0e02b2c3d479');
       expect(result?.nome).toBe("Dr. João Silva");
     });
 
     it('should return null when id does not exist', async () => {
-      const result = await medicoService.getMedicoById(999);
+      const result = await medicoService.getMedicoById('invalid-uuid');
       
       expect(result).toBeNull();
     });

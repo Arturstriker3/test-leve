@@ -2,7 +2,7 @@ import { Medico } from '../interface/medico.interface';
 
 export const medicosMock: Medico[] = [
   {
-    id: 1,
+    id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
     nome: "Dr. João Silva",
     especialidade: "Cardiologista",
     horarios_disponiveis: [
@@ -12,7 +12,7 @@ export const medicosMock: Medico[] = [
     ]
   },
   {
-    id: 2,
+    id: '6ba7b810-9dad-11d1-80b4-00c04fd430c8',
     nome: "Dra. Maria Souza",
     especialidade: "Dermatologista",
     horarios_disponiveis: [
@@ -21,7 +21,7 @@ export const medicosMock: Medico[] = [
     ]
   },
   {
-    id: 3,
+    id: '6ba7b811-9dad-11d1-80b4-00c04fd430c8',
     nome: "Dr. Carlos Oliveira",
     especialidade: "Pediatra",
     horarios_disponiveis: [
@@ -32,7 +32,7 @@ export const medicosMock: Medico[] = [
     ]
   },
   {
-    id: 4,
+    id: '6ba7b812-9dad-11d1-80b4-00c04fd430c8',
     nome: "Dra. Ana Paula",
     especialidade: "Ginecologista",
     horarios_disponiveis: [
@@ -42,7 +42,7 @@ export const medicosMock: Medico[] = [
     ]
   },
   {
-    id: 5,
+    id: '6ba7b813-9dad-11d1-80b4-00c04fd430c8',
     nome: "Dr. Roberto Santos",
     especialidade: "Ortopedista",
     horarios_disponiveis: [

@@ -1,14 +1,14 @@
-import { IsArray, ValidateNested, IsObject, Type } from 'class-transformer';
-import { ValidateNested as ValidateNestedDecorator } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, ValidateNested, IsObject } from 'class-validator';
 import { PaginationDto } from './pagination.dto';
 
 export class PaginatedResponseDto<T> {
   @IsArray()
-  @ValidateNestedDecorator({ each: true })
+  @ValidateNested({ each: true })
   data!: T[];
 
   @IsObject()
-  @ValidateNestedDecorator()
+  @ValidateNested()
   @Type(() => PaginationDto)
   pagination!: PaginationDto;
 } 

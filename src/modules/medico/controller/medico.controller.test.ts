@@ -26,7 +26,7 @@ describe('MedicoController', () => {
       const mockPaginatedResponse = {
         data: [
           {
-            id: 1,
+            id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
             nome: "Dr. João Silva",
             especialidade: "Cardiologista",
             horarios_disponiveis: ["2024-10-05 09:00"]
@@ -99,7 +99,7 @@ describe('MedicoController', () => {
     it('should return medico when found', async () => {
       // Arrange
       const mockMedico: Medico = {
-        id: 1,
+        id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
         nome: "Dr. João Silva",
         especialidade: "Cardiologista",
         horarios_disponiveis: ["2024-10-05 09:00"]
@@ -108,13 +108,13 @@ describe('MedicoController', () => {
       mockMedicoService.getMedicoById.mockResolvedValue(mockMedico);
 
       // Act
-      const result = await medicoController.getMedicoById(1);
+      const result = await medicoController.getMedicoById('f47ac10b-58cc-4372-a567-0e02b2c3d479');
 
       // Assert
       expect(result.success).toBe(true);
       expect(result.data).toEqual(mockMedico);
       expect(result.message).toBe('Medico retrieved successfully');
-      expect(mockMedicoService.getMedicoById).toHaveBeenCalledWith(1);
+      expect(mockMedicoService.getMedicoById).toHaveBeenCalledWith('f47ac10b-58cc-4372-a567-0e02b2c3d479');
     });
 
     it('should return error when medico not found', async () => {
@@ -122,13 +122,13 @@ describe('MedicoController', () => {
       mockMedicoService.getMedicoById.mockResolvedValue(null);
 
       // Act
-      const result = await medicoController.getMedicoById(999);
+      const result = await medicoController.getMedicoById('invalid-uuid');
 
       // Assert
       expect(result.success).toBe(false);
       expect(result.message).toBe('Medico not found');
       expect(result.data).toBeUndefined();
-      expect(mockMedicoService.getMedicoById).toHaveBeenCalledWith(999);
+      expect(mockMedicoService.getMedicoById).toHaveBeenCalledWith('invalid-uuid');
     });
 
     it('should handle service errors', async () => {
@@ -137,7 +137,7 @@ describe('MedicoController', () => {
       mockMedicoService.getMedicoById.mockRejectedValue(new Error(errorMessage));
 
       // Act
-      const result = await medicoController.getMedicoById(1);
+      const result = await medicoController.getMedicoById('f47ac10b-58cc-4372-a567-0e02b2c3d479');
 
       // Assert
       expect(result.success).toBe(false);
@@ -150,7 +150,7 @@ describe('MedicoController', () => {
       // Arrange
       const mockMedicos: Medico[] = [
         {
-          id: 1,
+          id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
           nome: "Dr. João Silva",
           especialidade: "Cardiologista",
           horarios_disponiveis: ["2024-10-05 09:00"]

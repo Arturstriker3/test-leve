@@ -23,7 +23,7 @@ describe('GetAgendasUseCase', () => {
       const mockMedicosResponse = {
         data: [
           {
-            id: 1,
+            id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
             nome: "Dr. João Silva",
             especialidade: "Cardiologista",
             horarios_disponiveis: ["2024-10-05 09:00"]
@@ -56,13 +56,13 @@ describe('GetAgendasUseCase', () => {
       const mockMedicosResponse = {
         data: [
           {
-            id: 1,
+            id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
             nome: "Dr. João Silva",
             especialidade: "Cardiologista",
             horarios_disponiveis: ["2024-10-05 09:00"]
           },
           {
-            id: 2,
+            id: '6ba7b810-9dad-11d1-80b4-00c04fd430c8',
             nome: "Dra. Maria Souza",
             especialidade: "Dermatologista",
             horarios_disponiveis: ["2024-10-06 14:00"]
