@@ -53,7 +53,7 @@ describe('MedicoController', () => {
       expect(result.pagination).toEqual(mockPaginatedResponse.pagination);
       expect(result.message).toBe('Medicos retrieved successfully');
       expect(result.timestamp).toBeDefined();
-      expect(mockMedicoService.getMedicos).toHaveBeenCalledWith(undefined);
+      expect(mockMedicoService.getMedicos).toHaveBeenCalledWith(undefined, {});
     });
 
     it('should pass pagination parameters to service', async () => {
@@ -78,7 +78,7 @@ describe('MedicoController', () => {
 
       // Assert
       expect(result.success).toBe(true);
-      expect(mockMedicoService.getMedicos).toHaveBeenCalledWith(paginationParams);
+      expect(mockMedicoService.getMedicos).toHaveBeenCalledWith(paginationParams, {});
     });
 
     it('should handle service errors', async () => {

@@ -24,4 +24,13 @@ functions:
           method: get
           cors: true
 
+  # Listar médicos com filtros
+  getMedicos:
+    handler: src/index.getMedicos
+    events:
+      - http:
+          path: medicos
+          method: get
+          cors: true
+
 # Restante Mockado 

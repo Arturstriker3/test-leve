@@ -95,8 +95,52 @@ Accept: application/json
 #   "timestamp": "2024-01-01T12:00:00.000Z"
 # }
 
+### === NOVOS ENDPOINTS COM FILTROS ===
+
+### ✅ Listar médicos (sem filtros)
+GET {{baseUrl}}/medicos
+Accept: application/json
+
+###
+
+### ✅ Listar médicos com paginação
+GET {{baseUrl}}/medicos?page=1&limit=3
+Accept: application/json
+
+###
+
+### ✅ Filtrar médicos por especialidade
+GET {{baseUrl}}/medicos?especialidade=Cardiologista
+Accept: application/json
+
+###
+
+### ✅ Filtrar médicos por especialidade com paginação
+GET {{baseUrl}}/medicos?especialidade=Dermatologista&page=1&limit=2
+Accept: application/json
+
+###
+
+### === TESTES DE VALIDAÇÃO DE FILTROS ===
+
+### ❌ Especialidade inválida
+GET {{baseUrl}}/medicos?especialidade=EspecialidadeInexistente
+Accept: application/json
+
+###
+
+### ❌ Parâmetro de filtro desconhecido
+GET {{baseUrl}}/medicos?parametroInvalido=teste
+Accept: application/json
+
+###
+
+### ❌ Múltiplos parâmetros inválidos
+GET {{baseUrl}}/medicos?parametroInvalido=teste&outroInvalido=abc&especialidade=Cardiologista
+Accept: application/json
+
+###
+
 ### === ENDPOINTS NÃO IMPLEMENTADOS (apenas para referência futura) ===
 # POST {{baseUrl}}/agendamento - Criar agendamento
-# GET {{baseUrl}}/medicos - Listar médicos
-# GET {{baseUrl}}/medicos/{id} - Buscar médico por ID
-# GET {{baseUrl}}/medicos?especialidade=Cardiologista - Filtrar por especialidade 
+# GET {{baseUrl}}/medicos/{id} - Buscar médico por ID 
