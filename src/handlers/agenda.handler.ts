@@ -1,12 +1,12 @@
 import 'reflect-metadata';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
-import { container } from '../shared/container/inversify.config';
-import { TYPES } from '../shared/types/container-types';
-import { AgendaController } from '../agenda/controller/agenda.controller';
+import { container } from '../modules/shared/container/inversify.config';
+import { TYPES } from '../modules/shared/types/container-types';
+import { AgendaController } from '../modules/agenda/controller/agenda.controller';
 import { LambdaResponse } from '../utils/lambda-response.util';
-import { PaginationUtil } from '../shared/utils/pagination.util';
-import { ValidationUtil } from '../shared/utils/validation.util';
-import { PaginationQueryDto } from '../shared/dto/pagination-query.dto';
+import { PaginationUtil } from '../modules/shared/utils/pagination.util';
+import { ValidationUtil } from '../modules/shared/utils/validation.util';
+import { PaginationQueryDto } from '../modules/shared/dto/pagination-query.dto';
 
 export const getAgendas = async (
   event: APIGatewayProxyEvent,

@@ -65,47 +65,92 @@ A aplicação segue uma **arquitetura modular em camadas** com **separação de 
 
 ```
 api-serveless/
-├── 📂 src/                          # Código fonte
-│   ├── 📂 shared/                   # Recursos compartilhados
-│   │   ├── 📂 container/            # Configuração DI (Inversify)
-│   │   │   └── inversify.config.ts  # Setup do container
-│   │   ├── 📂 decorators/           # Decorators customizados
-│   │   │   └── injectable.decorator.ts
-│   │   ├── 📂 interfaces/           # Interfaces compartilhadas
-│   │   │   └── base-response.interface.ts
-│   │   ├── 📂 types/               # Tipos e constantes
-│   │   │   ├── container-types.ts  # Símbolos do DI
-│   │   │   └── index.ts            # Exportações
-│   │   └── 📂 utils/               # Utilitários compartilhados
-│   │       └── response-builder.util.ts
-│   ├── 📂 utils/                   # Utilitários específicos
-│   │   └── lambda-response.util.ts # Formatação Lambda
-│   ├── 📂 handlers/                # Handlers das funções Lambda
-│   │   └── agenda.handler.ts       # Handler da agenda
-│   ├── 📂 agenda/                  # Módulo de domínio
-│   │   ├── 📂 controller/          # Camada de controle
-│   │   │   ├── agenda.controller.ts
-│   │   │   └── agenda.controller.test.ts
-│   │   ├── 📂 service/             # Camada de negócio
-│   │   │   ├── agenda.service.ts
-│   │   │   └── get-agendas.use-case.test.ts
-│   │   ├── 📂 dto/                 # Data Transfer Objects
-│   │   │   ├── medico.dto.ts
-│   │   │   └── agenda-response.dto.ts
-│   │   ├── 📂 interface/           # Interfaces do domínio
-│   │   │   ├── medico.interface.ts
-│   │   │   └── agenda-response.interface.ts
-│   │   └── 📂 mocks/               # Dados mockados
-│   │       └── medicos.mock.ts
-│   └── index.ts                    # Ponto de entrada
-├── 📂 examples/                    # Exemplos de uso
-│   └── api-requests.http           # Requisições HTTP
-├── 📄 serverless.yml              # Configuração Serverless
-├── 📄 tsconfig.json               # Configuração TypeScript
-├── 📄 package.json                # Dependências e scripts
-├── 📄 jest.config.js              # Configuração Jest
-└── 📄 README.md                   # Documentação
+├── 📂 src/                                    # Código fonte principal
+│   ├── 🎯 modules/                            # Arquitetura modular
+│   │   ├── 🔧 shared/                         # Recursos compartilhados
+│   │   │   ├── 📦 container/                  # Injeção de dependência
+│   │   │   │   └── inversify.config.ts        # Configuração do container DI
+│   │   │   ├── 🏷️ decorators/                 # Decorators customizados
+│   │   │   │   └── injectable.decorator.ts    # @Injectable decorator
+│   │   │   ├── 📋 dto/                        # DTOs genéricos reutilizáveis
+│   │   │   │   ├── pagination.dto.ts          # DTO de paginação
+│   │   │   │   ├── pagination-query.dto.ts    # DTO para query params
+│   │   │   │   └── paginated-response.dto.ts  # DTO genérico paginado
+│   │   │   ├── 🔗 interfaces/                 # Interfaces compartilhadas
+│   │   │   │   ├── base-response.interface.ts # Interface base de resposta
+│   │   │   │   ├── paginated-response.interface.ts # Interface paginada
+│   │   │   │   └── paginated-api-response.interface.ts # API paginada
+│   │   │   ├── 🏗️ types/                      # Tipos e constantes
+│   │   │   │   ├── container-types.ts         # Símbolos do DI
+│   │   │   │   └── index.ts                   # Exportações centralizadas
+│   │   │   └── 🛠️ utils/                      # Utilitários compartilhados
+│   │   │       ├── pagination.util.ts         # Lógica de paginação
+│   │   │       ├── response-builder.util.ts   # Builder de respostas
+│   │   │       ├── validation.util.ts         # Validação com class-validator
+│   │   │       └── validation.util.test.ts    # Testes de validação
+│   │   │
+│   │   ├── 📅 agenda/                         # Módulo de agenda
+│   │   │   ├── 🎮 controller/                 # Camada de controle
+│   │   │   │   ├── agenda.controller.ts       # Controller principal
+│   │   │   │   └── agenda.controller.test.ts  # Testes do controller
+│   │   │   ├── 📄 dto/                        # Data Transfer Objects
+│   │   │   │   └── agenda-response.dto.ts     # DTO de resposta da agenda
+│   │   │   ├── 🔗 interface/                  # Interfaces do domínio
+│   │   │   │   └── agenda-response.interface.ts # Interface de resposta
+│   │   │   ├── 📂 mocks/                      # Dados mockados (vazio)
+│   │   │   └── ⚙️ service/                    # Camada de negócio
+│   │   │       ├── agenda.service.ts          # Service principal
+│   │   │       └── get-agendas.use-case.test.ts # Testes de caso de uso
+│   │   │
+│   │   └── 👩‍⚕️ medico/                          # Módulo de médicos
+│   │       ├── 🎮 controller/                 # Camada de controle
+│   │       │   ├── medico.controller.ts       # Controller de médicos
+│   │       │   └── medico.controller.test.ts  # Testes do controller
+│   │       ├── 📄 dto/                        # Data Transfer Objects
+│   │       │   ├── medico.dto.ts              # DTO do médico
+│   │       │   └── medico-response.dto.ts     # DTO de resposta
+│   │       ├── 🔗 interface/                  # Interfaces do domínio
+│   │       │   └── medico.interface.ts        # Interface do médico
+│   │       ├── 🎭 mocks/                      # Dados mockados
+│   │       │   └── medicos.mock.ts            # 5 médicos de exemplo
+│   │       └── ⚙️ service/                    # Camada de negócio
+│   │           ├── medico.service.ts          # Service de médicos
+│   │           └── medico.use-case.test.ts    # Testes de caso de uso
+│   │
+│   ├── 🚀 handlers/                           # Lambda handlers
+│   │   └── agenda.handler.ts                  # Handler principal da agenda
+│   ├── 🔧 utils/                              # Utilitários específicos AWS
+│   │   └── lambda-response.util.ts            # Formatação de respostas Lambda
+│   └── 📤 index.ts                            # Exportações públicas
+│
+├── 📂 examples/                               # Exemplos de uso
+│   └── api-requests.http                      # Requisições HTTP de teste
+├── 📄 serverless.yml                          # Configuração Serverless Framework
+├── 📄 tsconfig.json                           # Configuração TypeScript
+├── 📄 package.json                            # Dependências e scripts
+├── 📄 jest.config.js                          # Configuração Jest
+└── 📄 README.md                               # Documentação do projeto
 ```
+
+### 🎨 **Legenda de Ícones**
+
+| Ícone | Tipo | Descrição |
+|-------|------|-----------|
+| 🎯 | **Pasta Principal** | Contém toda a arquitetura modular |
+| 🔧 | **Shared/Utils** | Recursos compartilhados entre módulos |
+| 📅 | **Módulo Domínio** | Módulo específico de agenda |
+| 👩‍⚕️ | **Módulo Domínio** | Módulo específico de médicos |
+| 🎮 | **Controller** | Camada de controle e orquestração |
+| ⚙️ | **Service** | Camada de lógica de negócio |
+| 📄 | **DTO** | Data Transfer Objects com validação |
+| 🔗 | **Interface** | Contratos e tipos TypeScript |
+| 🎭 | **Mocks** | Dados de exemplo para desenvolvimento |
+| 📦 | **Container** | Configuração de injeção de dependência |
+| 🏷️ | **Decorators** | Decorators customizados (@Injectable) |
+| 🏗️ | **Types** | Tipos, constantes e símbolos |
+| 🛠️ | **Utils** | Utilitários e helpers |
+| 🚀 | **Handlers** | Funções Lambda handlers |
+| 📤 | **Exports** | Exportações centralizadas |
 
 ## ⚡ Início Rápido
 
