@@ -5,13 +5,8 @@ import { medicosMock } from '../mocks/medicos.mock';
 @Injectable()
 export class AgendaService {
   async getAgendas(): Promise<AgendaResponse> {
-    // Simulando uma operação assíncrona
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          medicos: medicosMock
-        });
-      }, 100);
-    });
+    return {
+      medicos: medicosMock
+    };
   }
 } 
