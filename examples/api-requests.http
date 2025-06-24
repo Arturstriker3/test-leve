@@ -102,38 +102,81 @@ Content-Type: application/json
   }
 }
 
-### Listar Médicos e Horários Disponíveis
+### Listar Médicos e Horários Disponíveis (sem paginação)
 GET http://localhost:3000/dev/agendas
 Content-Type: application/json
 
 ###
 
-### Exemplo de resposta esperada para GET /agendas
+### Listar Médicos com Paginação
+GET http://localhost:3000/dev/agendas?page=1&limit=2
+Content-Type: application/json
+
+###
+
+### Listar Médicos - Segunda Página
+GET http://localhost:3000/dev/agendas?page=2&limit=2
+Content-Type: application/json
+
+###
+
+### Exemplo de resposta esperada para GET /agendas (PAGINADA)
 # {
-#   "data": {
-#     "medicos": [
-#       {
-#         "id": 1,
-#         "nome": "Dr. João Silva",
-#         "especialidade": "Cardiologista",
-#         "horarios_disponiveis": [
-#           "2024-10-05 09:00",
-#           "2024-10-05 10:00",
-#           "2024-10-05 11:00"
-#         ]
-#       },
-#       {
-#         "id": 2,
-#         "nome": "Dra. Maria Souza",
-#         "especialidade": "Dermatologista",
-#         "horarios_disponiveis": [
-#           "2024-10-06 14:00",
-#           "2024-10-06 15:00"
-#         ]
-#       }
-#     ]
+#   "data": [
+#     {
+#       "id": 1,
+#       "nome": "Dr. João Silva",
+#       "especialidade": "Cardiologista",
+#       "horarios_disponiveis": [
+#         "2024-10-05 09:00",
+#         "2024-10-05 10:00",
+#         "2024-10-05 11:00"
+#       ]
+#     },
+#     {
+#       "id": 2,
+#       "nome": "Dra. Maria Souza",
+#       "especialidade": "Dermatologista",
+#       "horarios_disponiveis": [
+#         "2024-10-06 14:00",
+#         "2024-10-06 15:00"
+#       ]
+#     }
+#   ],
+#   "pagination": {
+#     "current_page": 1,
+#     "per_page": 2,
+#     "total": 5,
+#     "total_pages": 3,
+#     "has_next_page": true,
+#     "has_previous_page": false
 #   },
 #   "message": "Agendas retrieved successfully",
 #   "success": true,
 #   "timestamp": "2024-01-01T12:00:00.000Z"
+# }
+
+### Exemplo de uso da paginação genérica
+# O MedicoService suporta paginação:
+# - GET /medicos?page=1&limit=2
+# - GET /medicos?page=2&limit=3
+# 
+# Resposta paginada:
+# {
+#   "data": [
+#     {
+#       "id": 1,
+#       "nome": "Dr. João Silva",
+#       "especialidade": "Cardiologista",
+#       "horarios_disponiveis": ["2024-10-05 09:00"]
+#     }
+#   ],
+#   "pagination": {
+#     "current_page": 1,
+#     "per_page": 2,
+#     "total": 5,
+#     "total_pages": 3,
+#     "has_next_page": true,
+#     "has_previous_page": false
+#   }
 # } 

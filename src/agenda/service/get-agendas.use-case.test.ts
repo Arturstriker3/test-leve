@@ -1,102 +1,147 @@
 import 'reflect-metadata';
 import { AgendaService } from './agenda.service';
 import { AgendaResponse } from '../interface/agenda-response.interface';
+import { MedicoService } from '../../medico/service/medico.service';
 
 describe('GetAgendasUseCase', () => {
   let agendaService: AgendaService;
+  let mockMedicoService: jest.Mocked<MedicoService>;
 
   beforeEach(() => {
-    agendaService = new AgendaService();
+    mockMedicoService = {
+      getMedicos: jest.fn(),
+      getMedicoById: jest.fn(),
+      getMedicosByEspecialidade: jest.fn(),
+    } as jest.Mocked<MedicoService>;
+
+    agendaService = new AgendaService(mockMedicoService);
   });
 
   describe('getAgendas', () => {
     it('should return agendas with correct structure', async () => {
+      // Arrange
+      const mockMedicosResponse = {
+        data: [
+          {
+            id: 1,
+            nome: "Dr. João Silva",
+            especialidade: "Cardiologista",
+            horarios_disponiveis: ["2024-10-05 09:00"]
+          }
+        ],
+        pagination: {
+          current_page: 1,
+          per_page: 10,
+          total: 1,
+          total_pages: 1,
+          has_next_page: false,
+          has_previous_page: false,
+        }
+      };
+
+      mockMedicoService.getMedicos.mockResolvedValue(mockMedicosResponse);
+
       // Act
       const result: AgendaResponse = await agendaService.getAgendas();
 
       // Assert
       expect(result).toBeDefined();
-      expect(result.medicos).toBeDefined();
-      expect(Array.isArray(result.medicos)).toBe(true);
+      expect(result.data).toBeDefined();
+      expect(Array.isArray(result.data)).toBe(true);
+      expect(result.pagination).toBeDefined();
     });
 
-    it('should return at least one medico', async () => {
-      // Act
-      const result = await agendaService.getAgendas();
-
-      // Assert
-      expect(result.medicos.length).toBeGreaterThan(0);
-    });
-
-    it('should return medicos with required properties', async () => {
-      // Act
-      const result = await agendaService.getAgendas();
-      const medico = result.medicos[0];
-
-      // Assert
-      expect(medico).toHaveProperty('id');
-      expect(medico).toHaveProperty('nome');
-      expect(medico).toHaveProperty('especialidade');
-      expect(medico).toHaveProperty('horarios_disponiveis');
-    });
-
-    it('should return medicos with correct data types', async () => {
-      // Act
-      const result = await agendaService.getAgendas();
-      const medico = result.medicos[0]!;
-
-      // Assert
-      expect(medico).toBeDefined();
-      expect(typeof medico.id).toBe('number');
-      expect(typeof medico.nome).toBe('string');
-      expect(typeof medico.especialidade).toBe('string');
-      expect(Array.isArray(medico.horarios_disponiveis)).toBe(true);
-    });
-
-    it('should return medicos with valid horarios_disponiveis format', async () => {
-      // Act
-      const result = await agendaService.getAgendas();
-      const medico = result.medicos[0]!;
-
-      // Assert
-      expect(medico).toBeDefined();
-      expect(medico.horarios_disponiveis.length).toBeGreaterThan(0);
-      medico.horarios_disponiveis.forEach(horario => {
-        expect(typeof horario).toBe('string');
-        expect(horario).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/);
-      });
-    });
-
-    it('should return expected mock data', async () => {
-      // Act
-      const result = await agendaService.getAgendas();
-
-      // Assert
-      expect(result.medicos).toHaveLength(2);
-      
-      const drJoao = result.medicos.find(m => m.nome === "Dr. João Silva");
-      const draMaria = result.medicos.find(m => m.nome === "Dra. Maria Souza");
-
-      expect(drJoao).toBeDefined();
-      expect(drJoao?.especialidade).toBe("Cardiologista");
-      expect(drJoao?.horarios_disponiveis).toHaveLength(3);
-
-      expect(draMaria).toBeDefined();
-      expect(draMaria?.especialidade).toBe("Dermatologista");
-      expect(draMaria?.horarios_disponiveis).toHaveLength(2);
-    });
-
-    it('should resolve within reasonable time', async () => {
+    it('should return medicos from MedicoService', async () => {
       // Arrange
-      const startTime = Date.now();
+      const mockMedicosResponse = {
+        data: [
+          {
+            id: 1,
+            nome: "Dr. João Silva",
+            especialidade: "Cardiologista",
+            horarios_disponiveis: ["2024-10-05 09:00"]
+          },
+          {
+            id: 2,
+            nome: "Dra. Maria Souza",
+            especialidade: "Dermatologista",
+            horarios_disponiveis: ["2024-10-06 14:00"]
+          }
+        ],
+        pagination: {
+          current_page: 1,
+          per_page: 10,
+          total: 2,
+          total_pages: 1,
+          has_next_page: false,
+          has_previous_page: false,
+        }
+      };
+
+      mockMedicoService.getMedicos.mockResolvedValue(mockMedicosResponse);
+
+      // Act
+      const result = await agendaService.getAgendas();
+
+      // Assert
+      expect(result.data).toHaveLength(2);
+      expect(mockMedicoService.getMedicos).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call MedicoService.getMedicos without parameters', async () => {
+      // Arrange
+      const mockMedicosResponse = {
+        data: [],
+        pagination: {
+          current_page: 1,
+          per_page: 10,
+          total: 0,
+          total_pages: 0,
+          has_next_page: false,
+          has_previous_page: false,
+        }
+      };
+
+      mockMedicoService.getMedicos.mockResolvedValue(mockMedicosResponse);
 
       // Act
       await agendaService.getAgendas();
-      const endTime = Date.now();
 
       // Assert
-      const executionTime = endTime - startTime;
-      expect(executionTime).toBeLessThan(200); // Should complete in less than 200ms
+      expect(mockMedicoService.getMedicos).toHaveBeenCalledWith(undefined);
+    });
+
+    it('should pass pagination parameters to MedicoService', async () => {
+      // Arrange
+      const paginationParams = { page: 2, limit: 5 };
+      const mockMedicosResponse = {
+        data: [],
+        pagination: {
+          current_page: 2,
+          per_page: 5,
+          total: 0,
+          total_pages: 0,
+          has_next_page: false,
+          has_previous_page: true,
+        }
+      };
+
+      mockMedicoService.getMedicos.mockResolvedValue(mockMedicosResponse);
+
+      // Act
+      await agendaService.getAgendas(paginationParams);
+
+      // Assert
+      expect(mockMedicoService.getMedicos).toHaveBeenCalledWith(paginationParams);
+    });
+
+    it('should handle errors from MedicoService', async () => {
+      // Arrange
+      const errorMessage = 'Service error';
+      mockMedicoService.getMedicos.mockRejectedValue(new Error(errorMessage));
+
+      // Act & Assert
+      await expect(agendaService.getAgendas()).rejects.toThrow(errorMessage);
     });
   });
 }); 

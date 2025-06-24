@@ -4,6 +4,7 @@ import { container } from '../shared/container/inversify.config';
 import { TYPES } from '../shared/types/container-types';
 import { AgendaController } from '../agenda/controller/agenda.controller';
 import { LambdaResponse } from '../utils/lambda-response.util';
+import { PaginationUtil } from '../shared/utils/pagination.util';
 
 export const getAgendas = async (
   event: APIGatewayProxyEvent,
@@ -11,7 +12,13 @@ export const getAgendas = async (
 ): Promise<APIGatewayProxyResult> => {
   try {
     const agendaController = container.get<AgendaController>(TYPES.AgendaController);
-    const result = await agendaController.getAgendas();
+    
+    // Extrair parâmetros de paginação da query string
+    const paginationParams = PaginationUtil.extractPaginationParams(
+      event.queryStringParameters || {}
+    );
+    
+    const result = await agendaController.getAgendas(paginationParams);
     
     if (!result.success) {
       return LambdaResponse.internalServerError(result.message || 'Internal server error');
