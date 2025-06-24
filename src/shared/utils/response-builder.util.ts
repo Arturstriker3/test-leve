@@ -28,4 +28,13 @@ export class ResponseBuilder {
       timestamp: new Date().toISOString(),
     };
   }
+
+  static badRequest<T = null>(message: string, data?: T): BaseResponse<T> {
+    return {
+      data: data as T,
+      message,
+      success: false,
+      timestamp: new Date().toISOString(),
+    };
+  }
 } 

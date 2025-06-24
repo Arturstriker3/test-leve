@@ -198,17 +198,6 @@ npm test -- --coverage
 npm test -- --watch
 ```
 
-### **Resultado dos Testes**
-```
-✅ PASS  src/agenda/controller/agenda.controller.test.ts
-✅ PASS  src/agenda/service/get-agendas.use-case.test.ts
-
-Test Suites: 2 passed, 2 total
-Tests:       10 passed, 10 total
-Snapshots:   0 total
-Time:        5.217 s
-```
-
 ## 📡 API Endpoints
 
 ### **GET /agendas**
@@ -218,38 +207,6 @@ Retorna lista de médicos disponíveis com seus horários.
 ```http
 GET /dev/agendas
 Content-Type: application/json
-```
-
-**Response:**
-```json
-{
-  "data": {
-    "medicos": [
-      {
-        "id": 1,
-        "nome": "Dr. João Silva",
-        "especialidade": "Cardiologista",
-        "horarios_disponiveis": [
-          "2024-10-05 09:00",
-          "2024-10-05 10:00",
-          "2024-10-05 11:00"
-        ]
-      },
-      {
-        "id": 2,
-        "nome": "Dra. Maria Souza",
-        "especialidade": "Dermatologista",
-        "horarios_disponiveis": [
-          "2024-10-06 14:00",
-          "2024-10-06 15:00"
-        ]
-      }
-    ]
-  },
-  "message": "Agendas retrieved successfully",
-  "success": true,
-  "timestamp": "2024-01-01T12:00:00.000Z"
-}
 ```
 
 **Códigos de Status:**
@@ -450,51 +407,6 @@ mkdir -p src/novo-modulo/{controller,service,dto,interface,mocks}
 
 6. **Exportar no `index.ts`**
 
-### **Integrando com Banco de Dados**
-
-```typescript
-// Exemplo de integração com DynamoDB
-@Injectable()
-export class AgendaService {
-  constructor(
-    @inject(TYPES.DynamoRepository) 
-    private readonly repository: DynamoRepository
-  ) {}
-
-  async getAgendas(): Promise<AgendaResponse> {
-    const medicos = await this.repository.findAll('medicos');
-    return { medicos };
-  }
-}
-```
-
-### **Adicionando Middleware**
-
-```typescript
-// Middleware de autenticação
-export const authMiddleware = (event: APIGatewayProxyEvent) => {
-  const token = event.headers.Authorization;
-  if (!token) {
-    throw new Error('Authorization required');
-  }
-  // Validar token...
-};
-```
-
 ---
 
-## 📄 Licença
-
-MIT License - veja o arquivo [LICENSE](LICENSE) para detalhes.
-
-## 🤝 Contribuição
-
-1. Fork o projeto
-2. Crie uma branch: `git checkout -b feature/nova-feature`
-3. Commit suas mudanças: `git commit -m 'Add nova feature'`
-4. Push para a branch: `git push origin feature/nova-feature`
-5. Abra um Pull Request
-
----
-
-**Desenvolvido com ❤️ usando TypeScript e Serverless Framework** 
+**Desenvolvido usando TypeScript e Serverless Framework** 

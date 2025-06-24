@@ -1,126 +1,65 @@
 ### Ambiente de Desenvolvimento
 @baseUrl = http://localhost:3000/dev
 
-### === LISTAR MÉDICOS E HORÁRIOS ===
+### === ENDPOINTS FUNCIONAIS ===
 
-### Listar todos os médicos com horários disponíveis
+### ✅ Listar médicos com horários disponíveis (sem paginação)
 GET {{baseUrl}}/agendas
+Accept: application/json
 
-### === CRIAR AGENDAMENTO ===
+###
 
-### Criar agendamento com Dr. João Silva
-POST {{baseUrl}}/agendamento
-Content-Type: application/json
+### ✅ Listar médicos com paginação
+GET {{baseUrl}}/agendas?page=1&limit=2
+Accept: application/json
 
-{
-  "agendamento": {
-    "medico": "Dr. João Silva",
-    "paciente": "Carlos Almeida",
-    "data_horario": "2024-10-05 09:00"
-  }
-}
+###
 
-### Criar agendamento com Dra. Maria Souza
-POST {{baseUrl}}/agendamento
-Content-Type: application/json
+### ✅ Segunda página
+GET {{baseUrl}}/agendas?page=2&limit=2
+Accept: application/json
 
-{
-  "agendamento": {
-    "medico": "Dra. Maria Souza",
-    "paciente": "Ana Santos",
-    "data_horario": "2024-10-06 14:00"
-  }
-}
+###
 
-### Criar agendamento com Dr. Carlos Oliveira
-POST {{baseUrl}}/agendamento
-Content-Type: application/json
+### ✅ Página 3 com limite maior
+GET {{baseUrl}}/agendas?page=3&limit=3
+Accept: application/json
 
-{
-  "agendamento": {
-    "medico": "Dr. Carlos Oliveira",
-    "paciente": "João Pereira",
-    "data_horario": "2024-10-05 13:00"
-  }
-}
+###
 
 ### === TESTES DE VALIDAÇÃO ===
 
-### Erro de Validação - Campo agendamento faltando
-POST {{baseUrl}}/agendamento
-Content-Type: application/json
-
-{
-  "medico": "Dr. João Silva",
-  "paciente": "Carlos Almeida",
-  "data_horario": "2024-10-05 09:00"
-}
-
-### Erro de Validação - Campos obrigatórios faltando
-POST {{baseUrl}}/agendamento
-Content-Type: application/json
-
-{
-  "agendamento": {
-    "medico": "Dr. João Silva"
-  }
-}
-
-### Erro de Validação - Formato de data inválido
-POST {{baseUrl}}/agendamento
-Content-Type: application/json
-
-{
-  "agendamento": {
-    "medico": "Dr. João Silva",
-    "paciente": "Carlos Almeida",
-    "data_horario": "05/10/2024 09:00"
-  }
-}
-
-### Erro - Médico não encontrado
-POST {{baseUrl}}/agendamento
-Content-Type: application/json
-
-{
-  "agendamento": {
-    "medico": "Dr. Inexistente",
-    "paciente": "Carlos Almeida",
-    "data_horario": "2024-10-05 09:00"
-  }
-}
-
-### Erro - Horário não disponível (após fazer agendamento anterior)
-POST {{baseUrl}}/agendamento
-Content-Type: application/json
-
-{
-  "agendamento": {
-    "medico": "Dr. João Silva",
-    "paciente": "Outro Paciente",
-    "data_horario": "2024-10-05 09:00"
-  }
-}
-
-### Listar Médicos e Horários Disponíveis (sem paginação)
-GET http://localhost:3000/dev/agendas
-Content-Type: application/json
+### ❌ Página inválida (não é número)
+GET {{baseUrl}}/agendas?page=abc&limit=2
+Accept: application/json
 
 ###
 
-### Listar Médicos com Paginação
-GET http://localhost:3000/dev/agendas?page=1&limit=2
-Content-Type: application/json
+### ❌ Limite excede o máximo (100)
+GET {{baseUrl}}/agendas?page=1&limit=150
+Accept: application/json
 
 ###
 
-### Listar Médicos - Segunda Página
-GET http://localhost:3000/dev/agendas?page=2&limit=2
-Content-Type: application/json
+### ❌ Página negativa
+GET {{baseUrl}}/agendas?page=-1&limit=5
+Accept: application/json
 
 ###
 
-### Exemplo de resposta esperada para GET /agendas (PAGINADA)
+### ❌ Limite inválido (não é número)
+GET {{baseUrl}}/agendas?page=1&limit=abc
+Accept: application/json
+
+###
+
+### ❌ Página zero
+GET {{baseUrl}}/agendas?page=0&limit=5
+Accept: application/json
+
+###
+
+### === EXEMPLO DE RESPOSTA ESPERADA ===
 # {
 #   "data": [
 #     {
@@ -156,27 +95,8 @@ Content-Type: application/json
 #   "timestamp": "2024-01-01T12:00:00.000Z"
 # }
 
-### Exemplo de uso da paginação genérica
-# O MedicoService suporta paginação:
-# - GET /medicos?page=1&limit=2
-# - GET /medicos?page=2&limit=3
-# 
-# Resposta paginada:
-# {
-#   "data": [
-#     {
-#       "id": 1,
-#       "nome": "Dr. João Silva",
-#       "especialidade": "Cardiologista",
-#       "horarios_disponiveis": ["2024-10-05 09:00"]
-#     }
-#   ],
-#   "pagination": {
-#     "current_page": 1,
-#     "per_page": 2,
-#     "total": 5,
-#     "total_pages": 3,
-#     "has_next_page": true,
-#     "has_previous_page": false
-#   }
-# } 
+### === ENDPOINTS NÃO IMPLEMENTADOS (apenas para referência futura) ===
+# POST {{baseUrl}}/agendamento - Criar agendamento
+# GET {{baseUrl}}/medicos - Listar médicos
+# GET {{baseUrl}}/medicos/{id} - Buscar médico por ID
+# GET {{baseUrl}}/medicos?especialidade=Cardiologista - Filtrar por especialidade 

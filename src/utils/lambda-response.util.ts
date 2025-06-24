@@ -29,8 +29,20 @@ export class LambdaResponse {
     };
   }
 
-  static badRequest(message: string): APIGatewayProxyResult {
-    return this.error(400, message);
+  static badRequest(messageOrResponse: string | any): APIGatewayProxyResult {
+    if (typeof messageOrResponse === 'string') {
+      return this.error(400, messageOrResponse);
+    }
+    
+    return {
+      statusCode: 400,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
+      body: JSON.stringify(messageOrResponse),
+    };
   }
 
   static notFound(message: string): APIGatewayProxyResult {
