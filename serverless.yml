@@ -33,4 +33,37 @@ functions:
           method: get
           cors: true
 
+  # Agendamento endpoints
+  getAgendamentos:
+    handler: src/index.getAgendamentos
+    events:
+      - http:
+          path: agendamento
+          method: get
+          cors: true
+
+  getAgendamentoById:
+    handler: src/index.getAgendamentoById
+    events:
+      - http:
+          path: agendamento/{id}
+          method: get
+          cors: true
+
+  createAgendamento:
+    handler: src/index.createAgendamento
+    events:
+      - http:
+          path: agendamento
+          method: post
+          cors: true
+
+  deleteAgendamento:
+    handler: src/index.deleteAgendamento
+    events:
+      - http:
+          path: agendamento/{id}
+          method: delete
+          cors: true
+
 # Restante Mockado 

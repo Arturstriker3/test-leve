@@ -161,5 +161,84 @@ Accept: application/json
 
 ###
 
-### === ENDPOINTS NÃO IMPLEMENTADOS (apenas para referência futura) ===
-# POST {{baseUrl}}/agendamento - Criar agendamento 
+### === ENDPOINTS DE AGENDAMENTO ===
+
+### ✅ Criar agendamento
+POST {{baseUrl}}/agendamento
+Content-Type: application/json
+
+{
+  "agendamento": {
+    "medico": "Dr. João Silva",
+    "paciente": "Dudu",
+    "data_horario": "2024-10-05 09:00"
+  }
+}
+
+###
+
+### ✅ Listar agendamentos
+GET {{baseUrl}}/agendamento
+Accept: application/json
+
+###
+
+### ✅ Listar agendamentos com paginação
+GET {{baseUrl}}/agendamento?page=1&limit=2
+Accept: application/json
+
+###
+
+### ✅ Filtrar agendamentos por médico
+GET {{baseUrl}}/agendamento?medico=João
+Accept: application/json
+
+###
+
+### ✅ Filtrar agendamentos por paciente
+GET {{baseUrl}}/agendamento?paciente=Carlos
+Accept: application/json
+
+###
+
+### ✅ Buscar agendamento por ID
+GET {{baseUrl}}/agendamento/a1b2c3d4-5e6f-7890-abcd-ef1234567890
+Accept: application/json
+
+###
+
+### ✅ Deletar agendamento
+DELETE {{baseUrl}}/agendamento/a1b2c3d4-5e6f-7890-abcd-ef1234567890
+Accept: application/json
+
+###
+
+### === TESTES DE VALIDAÇÃO DE AGENDAMENTO ===
+
+### ❌ Criar agendamento com dados inválidos
+POST {{baseUrl}}/agendamento
+Content-Type: application/json
+
+{
+  "agendamento": {
+    "medico": "",
+    "paciente": "Carlos Almeida",
+    "data_horario": "invalid-date"
+  }
+}
+
+###
+
+### ❌ Criar agendamento sem estrutura "agendamento"
+POST {{baseUrl}}/agendamento
+Content-Type: application/json
+
+{
+  "medico": "Dr. João Silva",
+  "paciente": "Carlos Almeida",
+  "data_horario": "2024-10-05 09:00"
+}
+
+###
+
+### === ENDPOINTS NÃO IMPLEMENTADOS (apenas para referência futura) === 

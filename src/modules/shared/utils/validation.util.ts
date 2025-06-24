@@ -47,6 +47,42 @@ export class ValidationUtil {
     }
   }
 
+  static async validatePayload<T extends object>(
+    target: new () => T,
+    payload: any
+  ): Promise<ValidationResult<T>> {
+    try {
+      // Transform plain object to class instance
+      const dto = plainToClass(target, payload);
+      
+      // Validate the DTO
+      const errors: ValidationError[] = await validate(dto);
+      
+      if (errors.length > 0) {
+        const errorMessages = this.extractErrorMessages(errors);
+        return {
+          isValid: false,
+          errors: errorMessages,
+          response: ResponseBuilder.badRequest(
+            'Invalid payload parameters', 
+            { validationErrors: errorMessages }
+          )
+        };
+      }
+      
+      return {
+        isValid: true,
+        data: dto
+      };
+    } catch (error) {
+      return {
+        isValid: false,
+        errors: ['Validation failed'],
+        response: ResponseBuilder.badRequest('Invalid request format')
+      };
+    }
+  }
+
   private static extractErrorMessages(errors: ValidationError[]): string[] {
     const messages: string[] = [];
     
